@@ -1,0 +1,36 @@
+ASSUME CS: CODE, DS: DATA
+
+DATA SEGMENT
+ARR DB 05H, 0CCH, 78H, 0ABH, 0BEH, 15H, 98H, 45H
+ESUM DW 1 DUP(?)
+DATA ENDS
+
+
+CODE SEGMENT
+START: MOV AX, DATA
+       MOV DS, AX
+       MOV BX, 0000H
+ 
+       MOV DX, 0000H
+       MOV CL, 08H
+       LEA SI, ARR
+
+EVEN1:MOV AL, [SI]
+     MOV BL, AL
+     RCR AL, 1 
+     JC LBL
+     ADD DX, BX
+LBL: INC SI
+     DEC CL
+     JNZ EVEN1
+     MOV ESUM, DX
+      
+     MOV AH, 4CH
+     INT 21H
+
+CODE ENDS
+        END START
+
+
+
+       

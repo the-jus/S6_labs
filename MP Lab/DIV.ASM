@@ -1,0 +1,36 @@
+ASSUME DS:DATA, CS:CODE
+
+DATA SEGMENT
+NUM_H DW 5432H
+NUM_L DW 0ABCDH
+NUM_D DW 0BBBBH
+REM DW 1 DUP(?)
+QH DW 1 DUP(?)
+QL DW 1 DUP(?)
+ZERO DB 0DH, 0AH, "DIVISION BY ZERO","$"
+DATA ENDS
+
+CODE SEGMENT
+START:  MOV AX, DATA
+        MOV DS, AX
+
+        MOV AX, NUM_H
+        MOV DX, 0000H
+        CMP NUM_D, 0000H
+        JZ LABL1
+        DIV NUM_D
+        MOV QH, AX
+        MOV AX, NUM_L
+        DIV NUM_D
+        MOV QL, AX
+        MOV REM, DX
+        JMP LBL2
+LABL1:  MOV DX, OFFSET ZERO
+        MOV AH, 09H
+        INT 21H
+
+LBL2:   MOV AH, 4CH
+        INT 21H
+CODE ENDS
+        END START
+
